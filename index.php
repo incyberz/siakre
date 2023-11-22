@@ -1,5 +1,77 @@
 <?php
+session_start();
+# ================================================
+# PHP INDEX
+# ================================================
 $dm = 1;
+$debug = '';
+
+// set auto login
+$_SESSION['siakre_username'] = 'admin';
+$_SESSION['siakre_id_prodi'] = 1; // IF Informatika
+
+// set logout
+// unset($_SESSION['siakre_username']);
+
+
+// include 'pages/login.php';
+
+
+# ================================================
+# DATA SESSION
+# ================================================
+$id_user = '';
+$is_login = 0;
+$id_role = 0; // pengunjung
+$sebagai = 'Pengunjung';
+$username = '';
+$nama_user = ''; 
+$email = ''; 
+$no_wa = ''; 
+
+if(isset($_SESSION['siakre_username'])){
+  $is_login = 1;
+  $username = $_SESSION['siakre_username'];
+}
+
+
+
+# ================================================
+# KONEKSI KE MYSQL SERVER
+# ================================================
+include 'conn.php';
+
+# ================================================
+# USER DATA IF LOGIN
+# ================================================
+include 'data_user.php';
+$debug .= "<hr>Anda login sebagai $nama_user dg id-role : $id_role<hr>";
+
+
+# ================================================
+# DATA PRODI IF SET
+# ================================================
+$id_prodi = $_SESSION['siakre_id_prodi'] ?? '';
+include 'data_prodi.php';
+
+
+# ================================================
+# INCLUDES
+# ================================================
+include 'include/insho_functions.php';
+
+
+
+# ================================================
+# GET URL PARAMETER
+# ================================================
+$parameter = '';
+if(isset($_GET)){
+  foreach ($_GET as $key => $value) {
+    $parameter = $key;
+    break;
+  }
+}
 ?>
 
 <!DOCTYPE html>
@@ -50,34 +122,10 @@ $dm = 1;
   
   
   <main id="main" class="main">
-    
-    <div class="pagetitle">
-      <h1>Dashboard</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
-    
-    <?php include 'pages/dashboard.php'; ?>
-
-  </main><!-- End #main -->
-
-  <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
-    <div class="copyright">
-      &copy; Copyright <strong><span>SIAKRE</span></strong>. All Rights Reserved
-    </div>
-    <div class="credits">
-      <!-- All the links in the footer should remain intact. -->
-      <!-- You can delete the links only if you purchased the pro version. -->
-      <!-- Licensing information: https://bootstrapmade.com/license/ -->
-      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-    </div>
-  </footer><!-- End Footer -->
+    <?php include 'routing.php'; ?>
+  </main>
+  
+  <?php include 'pages/footer.php'; ?>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
